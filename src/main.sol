@@ -5,8 +5,9 @@ import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721En
 import "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 import "../lib/openzeppelin-contracts/contracts/utils/Counters.sol";
+import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract Chariteth is ERC721Enumerable, Ownable, ReentrancyGuard {
+contract Chariteth is ERC721Enumerable, ERC721URIStorage, Ownable, ReentrancyGuard {
     using Counters for Counters.Counter;
 
     // Proposal and Milestone Enums
@@ -59,7 +60,7 @@ contract Chariteth is ERC721Enumerable, Ownable, ReentrancyGuard {
     struct UserProfile {
         uint256 experiencePoints;
         uint256 level;
-        mapping(uint256 => bool) nftMilestonesEarned;
+        uint256[] nftMilestonesEarned;
     }
 
     // Mappings
@@ -102,6 +103,56 @@ contract Chariteth is ERC721Enumerable, Ownable, ReentrancyGuard {
         ERC721("FundraiserNFT", "FNFT") 
         Ownable(msg.sender) 
     {}
+
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        virtual
+        override(ERC721Enumerable, ERC721)
+        returns (address)
+    {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 amount)
+        internal
+        virtual
+        override(ERC721Enumerable, ERC721)
+    {
+        super._increaseBalance(account, amount);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return ERC721URIStorage.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC721Enumerable, ERC721URIStorage)
+        returns (bool)
+    {
+        return 
+            ERC721Enumerable.supportsInterface(interfaceId) ||
+            ERC721.supportsInterface(interfaceId) ||
+            ERC721URIStorage.supportsInterface(interfaceId);
+    }
+
+    function _baseURI() 
+        internal 
+        pure
+        virtual
+        override(ERC721) 
+        returns (string memory) 
+    {
+        return "";
+    }
 
     // KYC Verification
     function submitKYC(string memory _documentHash) external {
@@ -217,6 +268,105 @@ contract Chariteth is ERC721Enumerable, Ownable, ReentrancyGuard {
         _updateUserExperience(msg.sender, msg.value);
 
         emit Donation(_proposalId, msg.sender, msg.value);
+    }
+
+    // XP and Level Management Functions
+    function _updateUserExperience(address _donor, uint256 _donationAmount) internal {
+        UserProfile storage userProfile = userProfiles[_donor];
+        
+        // Calculate XP
+        uint256 xpEarned = (_donationAmount / 0.01 ether) * XP_PER_ETH;
+        userProfile.experiencePoints += xpEarned;
+
+        // Level up mechanism
+        _recalculateLevelAndNFT(userProfile, _donor);
+    }
+
+    function _recalculateLevelAndNFT(UserProfile storage _userProfile, address _user) internal {
+        uint256 currentLevel = 0;
+        while (_userProfile.experiencePoints >= (currentLevel + 1) * XP_LEVEL_THRESHOLD) {
+            currentLevel++;
+        }
+        
+        // Only update and check for NFT if level has changed
+        if (currentLevel != _userProfile.level) {
+            _userProfile.level = currentLevel;
+            emit LevelUp(_user, currentLevel);
+            _checkAndAwardNFT(_user);
+        }
+    }
+
+    function adjustUserExperience(address _user, uint256 _xpChange, bool _increase) external onlyOwner {
+        UserProfile storage userProfile = userProfiles[_user];
+        
+        if (_increase) {
+            userProfile.experiencePoints += _xpChange;
+        } else {
+            userProfile.experiencePoints = (userProfile.experiencePoints > _xpChange) 
+                ? userProfile.experiencePoints - _xpChange 
+                : 0;
+        }
+
+        // Recalculate level and potentially award NFT
+        _recalculateLevelAndNFT(userProfile, _user);
+    }
+
+    function adjustProposalTotalVotes(uint256 _proposalId, uint256 _votesToSet) external onlyOwner {
+        Proposal storage proposal = proposals[_proposalId];
+        
+        // Set the total votes directly
+        proposal.totalVotes = _votesToSet;
+
+        // Automatically activate the proposal if votes meet or exceed the required threshold
+        if (proposal.totalVotes >= VOTES_REQUIRED && proposal.status == ProposalStatus.Pending) {
+            proposal.status = ProposalStatus.Active;
+            emit ProposalActivated(_proposalId);
+        }
+    }
+
+    // NFT Minting with Level Check
+    function _checkAndAwardNFT(address _user) internal {
+        UserProfile storage userProfile = userProfiles[_user];
+        
+        for (uint256 i = 0; i < NFT_MILESTONE_LEVELS.length; i++) {
+            if (
+                userProfile.level == NFT_MILESTONE_LEVELS[i] && 
+                !_nftAlreadyEarned(userProfile, NFT_MILESTONE_LEVELS[i])
+            ) {
+                _tokenIds.increment();
+                uint256 newTokenId = _tokenIds.current();
+                
+                _safeMint(_user, newTokenId);
+                
+                // Set IPFS URI based on level (replace with actual URIs)
+                string memory levelUri = _getLevelUri(NFT_MILESTONE_LEVELS[i]);
+                _setTokenURI(newTokenId, levelUri);
+                
+                // Track earned NFT
+                userProfile.nftMilestonesEarned.push(NFT_MILESTONE_LEVELS[i]);
+                
+                emit NFTAwarded(_user, newTokenId, NFT_MILESTONE_LEVELS[i]);
+            }
+        }
+    }
+
+    // Helper to check if NFT already earned
+    function _nftAlreadyEarned(UserProfile storage _profile, uint256 _level) internal view returns (bool) {
+        for (uint256 i = 0; i < _profile.nftMilestonesEarned.length; i++) {
+            if (_profile.nftMilestonesEarned[i] == _level) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Internal function to get IPFS URI based on level
+    function _getLevelUri(uint256 _level) internal pure returns (string memory) {
+        if (_level == 1) return "ipfs://bafkreiarpb6ruyffgvtfk7dd57bvgz5rgi5jsr5bkwoi4hlbu2nb56snvi";
+        if (_level == 5) return "ipfs://bafkreicopezulwbjjpx2zcpsuzefitfgswnbwecp5iqh6s3zmiw7rejfna";
+        if (_level == 10) return "ipfs://bafkreicc2wnatjzk5p3ldf637mtpbzacsb3kjsdldha2mmn76rejz6beaq";
+        if (_level == 15) return "ipfs://bafkreigcymgafomo2zjsvcxzk4o2wnytyk7ab3x6s3slw6ozyu6vxr5vku";
+        return "";
     }
 
     // Submit Milestone Document
@@ -339,42 +489,6 @@ contract Chariteth is ERC721Enumerable, Ownable, ReentrancyGuard {
 
         proposal.status = ProposalStatus.Cancelled;
         emit ProposalCancelled(_proposalId, _reason);
-    }
-
-    // Update User Experience
-    function _updateUserExperience(address _donor, uint256 _donationAmount) internal {
-        UserProfile storage userProfile = userProfiles[_donor];
-        
-        // Calculate XP
-        uint256 xpEarned = (_donationAmount / 0.01 ether) * XP_PER_ETH;
-        userProfile.experiencePoints += xpEarned;
-
-        // Level up mechanism
-        while (userProfile.experiencePoints >= (userProfile.level + 1) * XP_LEVEL_THRESHOLD) {
-            userProfile.level++;
-            emit LevelUp(_donor, userProfile.level);
-            _checkAndAwardNFT(_donor);
-        }
-    }
-
-    // Award NFT
-    function _checkAndAwardNFT(address _user) internal {
-        UserProfile storage userProfile = userProfiles[_user];
-        
-        for (uint256 i = 0; i < NFT_MILESTONE_LEVELS.length; i++) {
-            if (
-                userProfile.level == NFT_MILESTONE_LEVELS[i] && 
-                !userProfile.nftMilestonesEarned[NFT_MILESTONE_LEVELS[i]]
-            ) {
-                _tokenIds.increment();
-                uint256 newTokenId = _tokenIds.current();
-                
-                _safeMint(_user, newTokenId);
-                userProfile.nftMilestonesEarned[NFT_MILESTONE_LEVELS[i]] = true;
-                
-                emit NFTAwarded(_user, newTokenId, NFT_MILESTONE_LEVELS[i]);
-            }
-        }
     }
 
     // Utility Functions
