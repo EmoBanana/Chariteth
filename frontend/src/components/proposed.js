@@ -43,11 +43,7 @@ const ProposedProjects = () => {
             console.log(`Proposal ${i} Details:`, proposal);
 
             // Filter for pending proposals (status 0)
-            if (
-              proposal.status === 0 &&
-              proposal.title !== "" &&
-              proposal.title !== "Test"
-            ) {
+            if (proposal.status === 0 && proposal.title !== "") {
               proposals.push({
                 id: i,
                 title: proposal.title,

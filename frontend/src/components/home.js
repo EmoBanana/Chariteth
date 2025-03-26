@@ -44,11 +44,7 @@ const OngoingProjects = () => {
             console.log(`Proposal ${i} Details:`, proposal);
 
             // Filter for active proposals (status 1)
-            if (
-              proposal.status === 1 &&
-              proposal.title !== "" &&
-              proposal.title !== "Test"
-            ) {
+            if (proposal.status === 1 && proposal.title !== "") {
               projects.push({
                 id: i,
                 title: proposal.title,
