@@ -40,7 +40,7 @@ Ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/chariteth.git
+   git clone https://github.com/EmoBanana/chariteth.git
    ```
 
 2. **Navigate to the project directory**:
