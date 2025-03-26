@@ -6,7 +6,7 @@ import "./home.css";
 import CharitethABI from "./CharitethABI.json";
 
 const CHARITETH_CONTRACT_ADDRESS = "0x2cCeDa75225400BbCBE2401e52dA15627a93f14a";
-const MAX_PROJECTS_TO_FETCH = 3;
+const MAX_PROJECTS_TO_FETCH = 10;
 const XP_THRESHOLD = ethers.utils.parseEther("0.01"); // 0.01 ETH threshold for 1 XP
 
 const OngoingProjects = () => {
@@ -44,7 +44,11 @@ const OngoingProjects = () => {
             console.log(`Proposal ${i} Details:`, proposal);
 
             // Filter for active proposals (status 1)
-            if (proposal.status === 1 && proposal.title !== "") {
+            if (
+              proposal.status === 1 &&
+              proposal.title !== "" &&
+              proposal.title !== "Test"
+            ) {
               projects.push({
                 id: i,
                 title: proposal.title,

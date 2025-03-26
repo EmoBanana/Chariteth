@@ -6,7 +6,7 @@ import "./proposed.css";
 import CharitethABI from "./CharitethABI.json";
 
 const CHARITETH_CONTRACT_ADDRESS = "0x2cCeDa75225400BbCBE2401e52dA15627a93f14a";
-const MAX_PROPOSALS_TO_FETCH = 3;
+const MAX_PROPOSALS_TO_FETCH = 10;
 
 const ProposedProjects = () => {
   const { account, provider } = useWallet();
@@ -43,7 +43,11 @@ const ProposedProjects = () => {
             console.log(`Proposal ${i} Details:`, proposal);
 
             // Filter for pending proposals (status 0)
-            if (proposal.status === 0 && proposal.title !== "") {
+            if (
+              proposal.status === 0 &&
+              proposal.title !== "" &&
+              proposal.title !== "Test"
+            ) {
               proposals.push({
                 id: i,
                 title: proposal.title,

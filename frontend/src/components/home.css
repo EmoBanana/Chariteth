@@ -34,7 +34,7 @@ body {
 
 .home-project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 2fr));
   gap: 1.5rem;
 }
 
