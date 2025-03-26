@@ -28,7 +28,7 @@
 
 .proposal-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 1.5rem;
 }
 
@@ -66,6 +66,8 @@
 
 .proposal-summary {
   padding: 1rem;
+  font-family: "Futura";
+  font-size: 0.9rem;
 }
 
 .vote-progress {
@@ -94,6 +96,7 @@
 .proposal-details p {
   color: #34495e;
   margin-bottom: 1rem;
+  font-family: "Futura";
 }
 
 .donate-button {
@@ -105,6 +108,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: "Supply";
 }
 
 .donate-button:hover {
