@@ -1,66 +1,90 @@
-## Foundry
+# Chariteth
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Chariteth is a blockchain-powered platform that brings transparency, trust, and engagement to charitable donations. Using smart contracts and decentralized governance, Chariteth enables real-time tracking of funds, milestone-based disbursement, and active donor participation through a voting system. Donors are rewarded with experience points (XP) and NFTs for their contributions, creating an innovative and interactive donation experience.
 
-Foundry consists of:
+## Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **Blockchain Transparency**: All donations are tracked on the blockchain to ensure accountability.
+- **Smart Contracts**: Funds are held and released in stages as milestones are achieved, ensuring that donations are used effectively.
+- **Decentralized Voting**: Donors have the power to vote on new charity projects, with voting weight increasing based on contribution history.
+- **NFT Rewards**: Donors are rewarded with XP and unique NFTs based on their donation levels, promoting engagement and recognition.
+- **KYC for Fundraisers**: Fundraisers undergo KYC verification to build trust with donors and ensure legitimacy.
 
-## Documentation
+## How Chariteth Works
 
-https://book.getfoundry.sh/
+### Step 1: Donate and Earn XP
+Connect your wallet, browse through fundraising projects, and make donations. Earn 1 XP for every 0.01 ETH donated, and level up to unlock exclusive NFTs.
 
-## Usage
+### Step 2: Track Milestone-Based Progress
+As the charity reaches certain milestones (25%, 50%, 100%), they submit financial reports and proof of progress, ensuring your funds are used as intended.
 
-### Build
+### Step 3: Participate in Governance
+Donors can vote on pending projects via a decentralized voting system. The more you donate, the higher your voting power!
 
-```shell
-$ forge build
+## Live Demo
+
+Check out our [live demo on Vercel](https://chariteth.vercel.app/) to experience Chariteth for yourself. 
+
+## Cloning and Running Locally
+
+Follow these steps to clone the repository and run the application locally.
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (LTS version recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/EmoBanana/chariteth.git
+   ```
+
+2. **Navigate to the project directory**:
+   ```bash
+   cd chariteth
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+### Set Up Environment Variables
+
+Create a .env file in the root of the project and add the following key
+
+```bash
+REACT_APP_PINATA_JWT=<your_pinata_api_key>
 ```
 
-### Test
+### Running the Application
 
-```shell
-$ forge test
+To start the application locally, run the following command:
+
+```bash
+npm start
 ```
 
-### Format
+This will start the development server, and the app should automatically open in your default browser. If not, visit `http://localhost:3000` to view the application.
 
-```shell
-$ forge fmt
-```
+## Contributing
 
-### Gas Snapshots
+We welcome contributions! Feel free to submit issues or pull requests to improve Adsolute.
 
-```shell
-$ forge snapshot
-```
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
 
-### Anvil
+## License
 
-```shell
-$ anvil
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Deploy
+---
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Made with ❤️
