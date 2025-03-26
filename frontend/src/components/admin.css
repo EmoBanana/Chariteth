@@ -1,118 +1,173 @@
+@font-face {
+  font-family: "Futura";
+  src: url("../Futura.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Supply";
+  src: url("../SupplySans.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .admin-dashboard {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-container {
+  width: 100%;
   max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding-bottom: 4rem;
 }
 
-.admin-dashboard h2 {
+.admin-header {
   text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
+  font-family: "Futura";
 }
 
-.dashboard-grid {
+.admin-header h1 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.admin-header p {
+  color: #7f8c8d;
+}
+
+.admin-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
-.dashboard-section {
-  background-color: white;
+.admin-card {
+  background-color: #f9f9f9;
   border-radius: 8px;
+  border: grey 1px solid;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.dashboard-section h3 {
-  text-align: center;
-  color: #444;
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e0e0e0;
   padding-bottom: 0.5rem;
 }
 
-.form-group {
+.admin-card-header h3 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.admin-icon {
+  font-size: 1.5rem;
+}
+
+.admin-form-group {
   margin-bottom: 1rem;
 }
 
-.form-group label {
+.admin-form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
-  font-weight: 600;
+  color: #34495e;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"] {
-  width: 100%;
+.admin-form-group input {
+  width: 90%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid #bdc3c7;
   border-radius: 4px;
-  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
-.radio-group {
+.admin-form-group input:focus {
+  outline: none;
+  border-color: #afa7f5;
+}
+
+.admin-radio-group {
   display: flex;
   justify-content: space-around;
   margin-bottom: 1rem;
+  color: #34495e;
 }
 
-.radio-group label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-weight: normal;
-}
-
-.radio-group input[type="radio"] {
-  margin-right: 0.5rem;
-}
-
-.submit-btn {
-  width: 100%;
+.admin-button {
+  width: 97%;
   padding: 0.75rem;
-  background-color: #4caf50;
+  background-color: #afa7f5;
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.submit-btn:hover {
-  background-color: #45a049;
+.admin-button-second {
+  width: 97%;
+  padding: 0.75rem;
+  margin-top: 2.3rem;
+  background-color: #afa7f5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.submit-btn:disabled {
-  background-color: #cccccc;
+.admin-button:hover {
+  background-color: #9890da;
+}
+
+.admin-button-second:hover {
+  background-color: #9890da;
+}
+
+.admin-button:disabled {
+  background-color: #bdc3c7;
   cursor: not-allowed;
 }
 
-.error-message {
-  background-color: #ffdddd;
-  color: #f44336;
+.admin-alert {
   padding: 1rem;
-  border-radius: 4px;
   margin-bottom: 1rem;
+  border-radius: 4px;
   text-align: center;
 }
 
-.success-message {
-  background-color: #ddffdd;
-  color: #4caf50;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  text-align: center;
+.admin-alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
-/* Responsive Design */
+.admin-alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.admin-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #3498db;
+}
+
 @media (max-width: 768px) {
-  .dashboard-grid {
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 }

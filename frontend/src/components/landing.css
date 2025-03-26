@@ -14,7 +14,7 @@
 
 .landing-container {
   min-height: 100vh;
-  background: #fcf8f0;
+  background: #deeefc;
   color: black;
   font-family: "Futura";
 }
@@ -31,7 +31,7 @@
 }
 
 .highlight-text {
-  color: #efc290;
+  color: #afa7f5;
 }
 
 .title-black {

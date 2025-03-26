@@ -40,14 +40,8 @@ const AdminDashboard = () => {
         setContract(contractInstance);
 
         const ownerAddress = await contractInstance.owner();
-        console.log(contractInstance.owner());
         const isOwnerAccount =
           ownerAddress.toLowerCase() === account.toLowerCase();
-        console.log("Owner check:", {
-          ownerAddress,
-          account,
-          isOwner: isOwnerAccount,
-        });
 
         setIsOwner(isOwnerAccount);
         setCheckingOwner(false);
@@ -62,15 +56,11 @@ const AdminDashboard = () => {
     initializeContract();
   }, [provider, account]);
 
-  // Only redirect if we've completed the owner check and the user isn't the owner
   useEffect(() => {
     if (!checkingOwner && !loading) {
-      // If we don't have an account at all, go to landing page
       if (!account) {
         navigate("/");
-      }
-      // If we have an account but not owner, go to home page
-      else if (!isOwner) {
+      } else if (!isOwner) {
         navigate("/home");
       }
     }
@@ -82,14 +72,12 @@ const AdminDashboard = () => {
     setSuccess("");
 
     try {
-      // Convert XP amount to number
       const xpValue = parseInt(xpAmount, 10);
       if (isNaN(xpValue) || xpValue <= 0) {
         setError("Please enter a valid XP amount");
         return;
       }
 
-      // Call contract method to adjust XP
       const tx = await contract.adjustUserExperience(
         xpUserAddress,
         xpValue,
@@ -101,7 +89,6 @@ const AdminDashboard = () => {
         `Successfully ${xpAction}d ${xpValue} XP for ${xpUserAddress}`
       );
 
-      // Reset XP form
       setXpUserAddress("");
       setXpAmount("");
     } catch (err) {
@@ -116,20 +103,17 @@ const AdminDashboard = () => {
     setSuccess("");
 
     try {
-      // Validate inputs
       if (!proposalId || !votesToSet) {
         setError("Please fill in all proposal votes adjustment fields");
         return;
       }
 
-      // Convert votes amount to number
       const votesValue = parseInt(votesToSet, 10);
       if (isNaN(votesValue) || votesValue < 0) {
         setError("Please enter a valid votes amount");
         return;
       }
 
-      // Call contract method to adjust proposal total votes
       const tx = await contract.adjustProposalTotalVotes(
         proposalId,
         votesValue
@@ -140,7 +124,6 @@ const AdminDashboard = () => {
         `Successfully set total votes to ${votesValue} for Proposal #${proposalId}`
       );
 
-      // Reset votes form
       setProposalId("");
       setVotesToSet("");
     } catch (err) {
@@ -149,104 +132,123 @@ const AdminDashboard = () => {
     }
   };
 
+  if (loading || checkingOwner) {
+    return <div className="admin-loading">Checking permissions...</div>;
+  }
+
   return (
     <div className="admin-dashboard">
-      <h2>Admin Dashboard</h2>
-
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
-
-      <div className="dashboard-grid">
-        {/* XP Adjustment Section */}
-        <div className="dashboard-section">
-          <h3>Adjust User XP</h3>
-          <form onSubmit={handleAdjustXP}>
-            <div className="form-group">
-              <label htmlFor="xpUserAddress">User Address:</label>
-              <input
-                type="text"
-                id="xpUserAddress"
-                value={xpUserAddress}
-                onChange={(e) => setXpUserAddress(e.target.value)}
-                placeholder="Enter Ethereum address"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="xpAmount">XP Amount:</label>
-              <input
-                type="number"
-                id="xpAmount"
-                value={xpAmount}
-                onChange={(e) => setXpAmount(e.target.value)}
-                placeholder="Enter XP amount"
-                min="1"
-                required
-              />
-            </div>
-
-            <div className="form-group radio-group">
-              <label>
-                <input
-                  type="radio"
-                  value="increase"
-                  checked={xpAction === "increase"}
-                  onChange={() => setXpAction("increase")}
-                />
-                Increase XP
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="decrease"
-                  checked={xpAction === "decrease"}
-                  onChange={() => setXpAction("decrease")}
-                />
-                Decrease XP
-              </label>
-            </div>
-
-            <button type="submit" className="submit-btn" disabled={!account}>
-              {account ? "Adjust XP" : "Connect Wallet First"}
-            </button>
-          </form>
+      <div className="admin-container">
+        <div className="admin-header">
+          <h1>Admin Control Center</h1>
+          <p>Manage user experiences and proposal dynamics</p>
         </div>
 
-        {/* Proposal Votes Adjustment Section */}
-        <div className="dashboard-section">
-          <h3>Adjust Proposal Total Votes</h3>
-          <form onSubmit={handleAdjustProposalVotes}>
-            <div className="form-group">
-              <label htmlFor="proposalId">Proposal ID:</label>
-              <input
-                type="number"
-                id="proposalId"
-                value={proposalId}
-                onChange={(e) => setProposalId(e.target.value)}
-                placeholder="Enter Proposal ID"
-                min="0"
-                required
-              />
-            </div>
+        {error && <div className="admin-alert admin-alert-error">{error}</div>}
+        {success && (
+          <div className="admin-alert admin-alert-success">{success}</div>
+        )}
 
-            <div className="form-group">
-              <label htmlFor="votesToSet">Total Votes:</label>
-              <input
-                type="number"
-                id="votesToSet"
-                value={votesToSet}
-                onChange={(e) => setVotesToSet(e.target.value)}
-                placeholder="Enter total votes to set"
-                min="0"
-                required
-              />
+        <div className="admin-grid">
+          <div className="admin-card">
+            <div className="admin-card-header">
+              <h3>Adjust User XP</h3>
+              <i className="admin-icon">⭐</i>
             </div>
+            <form onSubmit={handleAdjustXP} className="admin-form">
+              <div className="admin-form-group">
+                <label>User Address</label>
+                <input
+                  type="text"
+                  value={xpUserAddress}
+                  onChange={(e) => setXpUserAddress(e.target.value)}
+                  placeholder="0x..."
+                  required
+                />
+              </div>
 
-            <button type="submit" className="submit-btn" disabled={!account}>
-              {account ? "Set Proposal Votes" : "Connect Wallet First"}
-            </button>
-          </form>
+              <div className="admin-form-group">
+                <label>XP Amount</label>
+                <input
+                  type="number"
+                  value={xpAmount}
+                  onChange={(e) => setXpAmount(e.target.value)}
+                  placeholder="Enter XP"
+                  min="1"
+                  required
+                />
+              </div>
+
+              <div className="admin-radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    value="increase"
+                    checked={xpAction === "increase"}
+                    onChange={() => setXpAction("increase")}
+                  />
+                  Increase
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="decrease"
+                    checked={xpAction === "decrease"}
+                    onChange={() => setXpAction("decrease")}
+                  />
+                  Decrease
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="admin-button"
+                disabled={!account}
+              >
+                {account ? "Adjust XP" : "Connect Wallet"}
+              </button>
+            </form>
+          </div>
+
+          <div className="admin-card">
+            <div className="admin-card-header">
+              <h3>Adjust Proposal Votes</h3>
+              <i className="admin-icon">📊</i>
+            </div>
+            <form onSubmit={handleAdjustProposalVotes} className="admin-form">
+              <div className="admin-form-group">
+                <label>Proposal ID</label>
+                <input
+                  type="number"
+                  value={proposalId}
+                  onChange={(e) => setProposalId(e.target.value)}
+                  placeholder="Enter Proposal ID"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <div className="admin-form-group">
+                <label>Total Votes</label>
+                <input
+                  type="number"
+                  value={votesToSet}
+                  onChange={(e) => setVotesToSet(e.target.value)}
+                  placeholder="Set Vote Count"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="admin-button-second"
+                disabled={!account}
+              >
+                {account ? "Set Proposal Votes" : "Connect Wallet"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

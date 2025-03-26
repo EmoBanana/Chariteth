@@ -1,13 +1,28 @@
+@font-face {
+  font-family: "Futura";
+  src: url("../Futura.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Supply";
+  src: url("../SupplySans.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .proposed-projects-container {
   max-width: 80vw;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .proposed-projects-container h1 {
   text-align: center;
   color: #333;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  font-family: "Futura";
   font-size: 2.5rem;
 }
 
@@ -26,7 +41,6 @@
 }
 
 .proposal-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -35,14 +49,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #f8f8f8;
+  background-color: #afa7f5;
+  color: white;
   cursor: pointer;
 }
 
 .proposal-header h2 {
   margin: 0;
-  color: #2c3e50;
-  font-size: 1.25rem;
+  color: white;
+  font-size: 1.3rem;
 }
 
 .expand-icon {
@@ -67,7 +82,7 @@
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #3498db;
+  background-color: #afa7f5;
   transition: width 0.5s ease;
 }
 
@@ -84,7 +99,7 @@
 .donate-button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #2ecc71;
+  background-color: #afa7f5;
   color: white;
   border: none;
   border-radius: 6px;
@@ -93,7 +108,7 @@
 }
 
 .donate-button:hover {
-  background-color: #27ae60;
+  background-color: #9890da;
 }
 
 .donate-button:disabled {
@@ -104,6 +119,7 @@
 .loading,
 .no-proposals {
   text-align: center;
-  padding: 2rem;
+  padding: 3rem;
   color: #7f8c8d;
+  font-family: "Futura";
 }

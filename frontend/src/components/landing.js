@@ -24,40 +24,34 @@ const Landing = () => {
 
   const choose = [
     {
-      icon: "lock",
-      title: "Decentralized & Secure",
+      title: "Transparency & Accountability",
       description:
-        "Built on blockchain technology to ensure transparency, security, and immutability of all predictions and transactions.",
+        "Funds are released only after charities meet milestones and provide proof, ensuring proper use of donations.",
     },
     {
-      icon: "coins",
-      title: "Low Fees",
+      title: "Blockchain Security",
       description:
-        "Enjoy minimal trading fees compared to traditional prediction platforms, keeping more profits in your wallet.",
+        "Donations are securely stored in tamper-proof smart contracts, with all transactions recorded on the blockchain.",
     },
     {
-      icon: "globe",
-      title: "Global Markets",
+      title: "DAO Voting System",
       description:
-        "Access prediction markets covering politics, sports, cryptocurrency, stocks, and many other categories worldwide.",
+        "Donors participate in project approvals through a decentralized voting system, giving them control over proposed cause.",
     },
     {
-      icon: "bolt",
-      title: "Instant Settlements",
+      title: "Reward System for Donors",
       description:
-        "Smart contracts automatically settle markets and distribute rewards as soon as outcomes are determined.",
+        "Donors earn exclusive NFTs and experience points (XP) for their contributions, recognizing their support.",
     },
     {
-      icon: "chart-pie",
-      title: "Advanced Analytics",
+      title: "Milestone-based Disbursement",
       description:
-        "Access powerful tools to analyze market trends, historical data, and make informed predictions.",
+        "Charities receive funds in stages as they reach milestones, ensuring accountability and progress.",
     },
     {
-      icon: "users",
-      title: "Community-Driven",
+      title: "KYC Verification for Fundraisers",
       description:
-        "Create your own markets and participate in a growing community of predictors from around the world.",
+        "A thorough KYC process verifies fundraisers, ensuring only legitimate charities receive donations.",
     },
   ];
 
@@ -89,9 +83,7 @@ const Landing = () => {
         </div>
 
         <div className="scroll-indicator" onClick={scrollToMarket}>
-          <p className="scroll-text">
-            <span className="highlight-text">Scroll</span> to learn more
-          </p>
+          <p className="scroll-text">Learn More</p>
           <svg
             className="scroll-arrow"
             fill="none"
@@ -112,36 +104,46 @@ const Landing = () => {
       <section ref={marketSectionRef} className="market-section">
         <div className="market-content">
           <h2 className="section-title">
-            How <span className="highlight-text">Scroll</span>&#38;Win Works
+            How Charit<span className="highlight-text">eth</span> Works
           </h2>
 
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-number">1</div>
-              <h3 className="feature-title">Create or Join Markets</h3>
+              <h3 className="feature-title">Connect & Choose a Cause</h3>
               <p className="feature-description">
-                Participate in prediction markets ranging from finance and
-                politics to sports and entertainment, or create your own
-                markets.
+                Donors can connect their crypto wallets to the Chariteth
+                platform and browse through a list of charity projects. Each
+                project includes information such as its goals, milestones, and
+                the amount of funding needed. Donors can select causes they are
+                passionate about and donate using Ethereum.
               </p>
             </div>
 
             <div className="feature-card">
               <div className="feature-number">2</div>
-              <h3 className="feature-title">Place Your Predictions</h3>
+              <h3 className="feature-title">
+                Milestone-based Fund Distribution
+              </h3>
               <p className="feature-description">
-                Back your insights with cryptocurrency. Our platform uses smart
-                contracts to ensure transparent and tamper-proof resolution.
+                Funds are securely held in a blockchain smart contract. As the
+                charity achieves specific milestones, such as reaching 25%, 50%,
+                or 100% of their goal, funds are released in stages. This
+                ensures transparency, as the charity must submit financial
+                records, proposals, and proof of work for approval at each
+                stage.
               </p>
             </div>
 
             <div className="feature-card">
               <div className="feature-number">3</div>
-              <h3 className="feature-title">Collect Your Winnings</h3>
+              <h3 className="feature-title">Vote and Earn Rewards</h3>
               <p className="feature-description">
-                When the market resolves in your favor, winnings are
-                automatically distributed to your wallet. No middlemen, no
-                delays.
+                For every 0.01 ETH donated, donors earn experience points (XP).
+                As donors level up by accumulating XP, they are rewarded with
+                unique NFTs. Donors also receive voting rights to help approve
+                new charity projects, giving them a say in how the funds are
+                allocated.
               </p>
             </div>
           </div>
@@ -151,7 +153,7 @@ const Landing = () => {
       <section className="choose-section">
         <div className="container">
           <h2 className="section-title">
-            Why Choose <span className="highlight-text">Scroll</span>&#38;Win
+            Why Choose Charit<span className="highlight-text">eth</span>
           </h2>
           <div className="choose-grid">
             {choose.map((item, index) => (
@@ -169,7 +171,7 @@ const Landing = () => {
 
       <section>
         <div className="cta-container">
-          <h3 className="cta-title">Ready to test your prediction skills?</h3>
+          <h3 className="cta-title">Ready to contribute to a cause?</h3>
           <button
             onClick={connectWallet}
             disabled={account || isConnecting}

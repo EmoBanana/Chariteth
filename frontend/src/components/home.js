@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallet } from "./walletContext";
-import "./proposed.css";
+import "./home.css";
 
 import CharitethABI from "./CharitethABI.json";
 
@@ -119,45 +119,47 @@ const OngoingProjects = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading ongoing projects...</div>;
+    return <div className="home-loading">Loading ongoing projects...</div>;
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return <div className="home-error">Error: {error}</div>;
   }
 
   if (ongoingProjects.length === 0) {
-    return <div className="no-projects">No ongoing projects found.</div>;
+    return <div className="home-no-projects">No ongoing projects found.</div>;
   }
 
   return (
-    <div className="ongoing-projects-container">
-      <h1>Ongoing Fundraising Projects</h1>
-      <div className="project-grid">
+    <div className="home-ongoing-projects-container">
+      <h1 className="home-ongoing-projects-title">
+        Ongoing Fundraising Projects
+        <div className="home-xp-info">
+          <span>Earn 1 XP per 0.01 ETH donated</span>
+        </div>
+      </h1>
+      <div className="home-project-grid">
         {ongoingProjects.map((project) => (
-          <div key={project.id} className="project-card">
-            <div className="project-header">
+          <div key={project.id} className="home-project-card">
+            <div className="home-project-header">
               <h2>{project.title}</h2>
-              <div className="xp-info">
-                <span>Earn 1 XP per 0.01 ETH donated</span>
-              </div>
             </div>
 
-            <div className="project-summary">
+            <div className="home-project-summary">
               <p>Creator: {project.creator}</p>
               <p>Created: {project.creationTime}</p>
               <p>
                 Funding Goal: {ethers.utils.formatEther(project.fundingGoal)}{" "}
                 ETH
               </p>
-              <div className="fundraising-progress">
+              <div className="home-fundraising-progress">
                 <p>
                   Raised: {ethers.utils.formatEther(project.totalRaised)} ETH /{" "}
                   {ethers.utils.formatEther(project.fundingGoal)} ETH
                 </p>
-                <div className="progress-bar">
+                <div className="home-progress-bar">
                   <div
-                    className="progress-bar-fill"
+                    className="home-progress-bar-fill"
                     style={{
                       width: `${
                         (Number(ethers.utils.formatEther(project.totalRaised)) /
@@ -174,10 +176,10 @@ const OngoingProjects = () => {
             </div>
 
             {project.description && (
-              <div className="project-details">
+              <div className="home-project-details">
                 <p>{project.description}</p>
                 <button
-                  className="donate-button"
+                  className="home-donate-button"
                   onClick={() => handleDonate(project.id)}
                   disabled={!account}
                 >
