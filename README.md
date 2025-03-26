@@ -23,7 +23,7 @@ Donors can vote on pending projects via a decentralized voting system. The more 
 
 ## Live Demo
 
-Check out our [live demo on Vercel](https://chariteth.vercel.app/) to experience Adsolute for yourself. 
+Check out our [live demo on Vercel](https://chariteth.vercel.app/) to experience Chariteth for yourself. 
 
 ## Cloning and Running Locally
 
