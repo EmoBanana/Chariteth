@@ -2,5 +2,13 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+optimizer = true
+optimizer-runs = 200
+
+[rpc_endpoints]
+scroll = "https://sepolia-rpc.scroll.io/"
+
+[profile.scroll]
+chain_id = 534351
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
