@@ -11,6 +11,9 @@ const CHARITETH_CONTRACT_ADDRESS = "0x2cCeDa75225400BbCBE2401e52dA15627a93f14a";
 const MAX_PROJECTS_TO_FETCH = 10;
 const XP_THRESHOLD = ethers.utils.parseEther("0.01"); // 0.01 ETH threshold for 1 XP
 
+// Free AI API service - you can replace with your preferred provider
+const AI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+
 const OngoingProjects = () => {
   const { account, provider } = useWallet();
   const [ongoingProjects, setOngoingProjects] = useState([]);
@@ -18,6 +21,10 @@ const OngoingProjects = () => {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [aiSummary, setAiSummary] = useState(null);
+  const [impactScore, setImpactScore] = useState(null);
+  const [isSummaryLoading, setIsSummaryLoading] = useState(false);
+  const [selectedTag, setSelectedTag] = useState("Ongoing");
   const carouselRef = useRef(null);
 
   const extendedFeatured = [...featured, featured[0]];
@@ -111,6 +118,14 @@ const OngoingProjects = () => {
     }
   }, [currentIndex, extendedFeatured.length]);
 
+  // Reset AI summary when a new project is selected
+  useEffect(() => {
+    if (selectedProject) {
+      setAiSummary(null);
+      setImpactScore(null);
+    }
+  }, [selectedProject]);
+
   const handleDonate = async (proposalId) => {
     if (!account) {
       alert("Please connect your wallet first");
@@ -159,6 +174,59 @@ const OngoingProjects = () => {
     );
   };
 
+  const generateAISummary = async () => {
+    if (!selectedProject) return;
+
+    setIsSummaryLoading(true);
+
+    try {
+      // You would need to replace this with your actual API key
+      // Note: For production, NEVER expose API keys in frontend code!
+      // Instead, use a backend proxy service to make the API call
+      const API_KEY = process.env.REACT_APP_AI_API_KEY;
+
+      const metadata = metaData.find((item) => item.id === selectedProject.id);
+      const projectDetails = {
+        title: selectedProject.title,
+        description: selectedProject.description,
+        fundingGoal: ethers.utils.formatEther(selectedProject.fundingGoal),
+        totalRaised: ethers.utils.formatEther(selectedProject.totalRaised),
+        metadata: metadata ? metadata.desc : "",
+        creator: selectedProject.creator,
+      };
+
+      // Example using a proxy server to protect your API key
+      const response = await fetch(
+        "http://localhost:3001/api/generate-summary",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ project: projectDetails }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate summary");
+      }
+
+      const data = await response.json();
+      console.log("Received data from backend:", data);
+
+      // Example response format from your backend
+      // { summary: "...", impactScore: 85 }
+      setAiSummary(data.summary);
+      setImpactScore(data.impactScore);
+    } catch (error) {
+      console.error("Error generating AI summary:", error);
+      setAiSummary("Failed to generate summary. Please try again later.");
+      setImpactScore(null);
+    } finally {
+      setIsSummaryLoading(false);
+    }
+  };
+
   if (loading) {
     return <div className="home-loading">Loading ongoing projects...</div>;
   }
@@ -171,12 +239,32 @@ const OngoingProjects = () => {
     return <div className="home-no-projects">No ongoing projects found.</div>;
   }
 
+  const handleTagClick = (tag) => {
+    if (tag === "Ongoing") {
+      setSelectedTag("Ongoing"); // Ensure "Ongoing" remains active
+    } else {
+      setSelectedTag(tag === selectedTag ? "Ongoing" : tag); // Toggle other tags, default back to "Ongoing"
+    }
+  };
+
+  // Filter projects based on the selected tag
+  const filteredProjects =
+    selectedTag === "Ongoing"
+      ? ongoingProjects // Show all ongoing projects for "Ongoing"
+      : ongoingProjects.filter((project) =>
+          metaData
+            .find((item) => item.id === project.id)
+            ?.tags.includes(selectedTag)
+        );
+
   const openPopup = (project) => {
     setSelectedProject(project);
   };
 
   const closePopup = () => {
     setSelectedProject(null);
+    setAiSummary(null);
+    setImpactScore(null);
   };
 
   const metadata = selectedProject
@@ -242,8 +330,31 @@ const OngoingProjects = () => {
           ›
         </button>
       </div>
+
+      <div className="tags">
+        <div className="tags-container">
+          <div
+            className={`tag ${selectedTag === "Ongoing" ? "active" : ""}`}
+            onClick={() => handleTagClick("Ongoing")}
+          >
+            Ongoing
+          </div>
+          {[...new Set(metaData.flatMap((item) => item.tags))].map(
+            (tag, index) => (
+              <div
+                key={index}
+                className={`tag ${selectedTag === tag ? "active" : ""}`}
+                onClick={() => handleTagClick(tag)}
+              >
+                {tag}
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
       <div className="home-project-grid">
-        {ongoingProjects.map((project) => {
+        {filteredProjects.map((project) => {
           const metadata = metaData.find((item) => item.id === project.id);
 
           return (
@@ -293,7 +404,10 @@ const OngoingProjects = () => {
                   </div>
                   <button
                     className="home-donate-button"
-                    onClick={() => handleDonate(project.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDonate(project.id);
+                    }}
                     disabled={!account}
                   >
                     {account ? "Donate" : "Connect Wallet"}
@@ -308,55 +422,95 @@ const OngoingProjects = () => {
       {selectedProject && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <button className="popup-close-button" onClick={closePopup}>
-              ×
-            </button>
+            <div className="popup-top">
+              <button className="popup-close-button" onClick={closePopup}>
+                ×
+              </button>
 
-            <div className="popup-image">
-              <img src={metadata.image} alt={`${selectedProject.title}`}></img>
-            </div>
-
-            <div className="popup-summary">
-              <h1>{selectedProject.title}</h1>
-              <p>{metadata.desc}</p>
-              <p>Creator: {selectedProject.creator}</p>
-              <p>
-                Funding Goal:{" "}
-                {ethers.utils.formatEther(selectedProject.fundingGoal)} ETH
-              </p>
-              <p>
-                Raised: {ethers.utils.formatEther(selectedProject.totalRaised)}{" "}
-                ETH / {ethers.utils.formatEther(selectedProject.fundingGoal)}{" "}
-                ETH
-              </p>
-              <div className="home-progress-bar">
-                <div
-                  className="home-progress-bar-fill"
-                  style={{
-                    width: `${
-                      (Number(
-                        ethers.utils.formatEther(selectedProject.totalRaised)
-                      ) /
-                        Number(
-                          ethers.utils.formatEther(selectedProject.fundingGoal)
-                        )) *
-                      100
-                    }%`,
-                  }}
-                />
+              <div className="popup-image">
+                <img
+                  src={metadata.image}
+                  alt={`${selectedProject.title}`}
+                ></img>
               </div>
 
-              <div className="popup-buttons">
-                <button className="home-donate-button">Generate Summary</button>
-                <button
-                  className="home-donate-button"
-                  onClick={() => handleDonate(selectedProject.id)}
-                  disabled={!account}
-                >
-                  {account ? "Donate" : "Connect Wallet"}
-                </button>
+              <div className="popup-summary">
+                <h1>{selectedProject.title}</h1>
+                <p>{metadata.desc}</p>
+                <p>Creator: {selectedProject.creator}</p>
+                <p>
+                  Funding Goal:{" "}
+                  {ethers.utils.formatEther(selectedProject.fundingGoal)} ETH
+                </p>
+                <p>
+                  Raised:{" "}
+                  {ethers.utils.formatEther(selectedProject.totalRaised)} ETH /{" "}
+                  {ethers.utils.formatEther(selectedProject.fundingGoal)} ETH
+                </p>
+                <div className="home-progress-bar">
+                  <div
+                    className="home-progress-bar-fill"
+                    style={{
+                      width: `${
+                        (Number(
+                          ethers.utils.formatEther(selectedProject.totalRaised)
+                        ) /
+                          Number(
+                            ethers.utils.formatEther(
+                              selectedProject.fundingGoal
+                            )
+                          )) *
+                        100
+                      }%`,
+                    }}
+                  />
+                </div>
+
+                <div className="popup-buttons">
+                  <button
+                    className="home-donate-button"
+                    onClick={generateAISummary}
+                    disabled={isSummaryLoading}
+                  >
+                    {isSummaryLoading
+                      ? "Generating..."
+                      : aiSummary
+                      ? "Regenerate Summary"
+                      : "Generate Summary"}
+                  </button>
+                  <button
+                    className="home-donate-button"
+                    onClick={() => handleDonate(selectedProject.id)}
+                    disabled={!account}
+                  >
+                    {account ? "Donate" : "Connect Wallet"}
+                  </button>
+                </div>
               </div>
             </div>
+            {aiSummary && (
+              <div className="ai-summary-container">
+                <h3>AI-Generated Summary</h3>
+                <p>{aiSummary}</p>
+
+                {impactScore !== null && (
+                  <div className="impact-score">
+                    <h4>Impact Score</h4>
+                    <div className="impact-score-display">
+                      <div className="impact-score-value">
+                        {impactScore}/100
+                      </div>
+                      <div className="impact-score-bar">
+                        <div
+                          className="impact-score-fill"
+                          style={{ width: `${impactScore}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
