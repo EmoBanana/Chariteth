@@ -24,10 +24,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  max-width: 1200px;
+  padding: 1rem 4rem;
+  max-width: 100%;
   margin: 0 auto;
-  background: #e6f3fd;
+  background: white;
 }
 
 .nav-links {
@@ -55,6 +55,17 @@
   color: #afa7f5;
   font-weight: bold;
   border-bottom: #afa7f5 2px solid;
+}
+
+.logo {
+  font-family: "Futura";
+  font-size: 2.3rem;
+  text-decoration: none;
+  color: black;
+  position: absolute;
+  top: 0.9rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .user-profile {

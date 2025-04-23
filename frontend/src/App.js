@@ -59,6 +59,12 @@ const Navigation = () => {
             Create Proposal
           </Link>
         </div>
+        <div className="nav-logo">
+          <Link to="/home" className="logo">
+            <span className="logo-text">Charit</span>
+            <span className="highlight-text">eth</span>
+          </Link>
+        </div>
         <div className="wallet-connection">
           {account ? (
             <>

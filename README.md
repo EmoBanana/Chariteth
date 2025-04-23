@@ -13,17 +13,20 @@ Chariteth is a blockchain-powered platform that brings transparency, trust, and 
 ## How Chariteth Works
 
 ### Step 1: Donate and Earn XP
+
 Connect your wallet, browse through fundraising projects, and make donations. Earn 1 XP for every 0.01 ETH donated, and level up to unlock exclusive NFTs.
 
 ### Step 2: Track Milestone-Based Progress
+
 As the charity reaches certain milestones (25%, 50%, 100%), they submit financial reports and proof of progress, ensuring your funds are used as intended.
 
 ### Step 3: Participate in Governance
+
 Donors can vote on pending projects via a decentralized voting system. The more you donate, the higher your voting power!
 
 ## Live Demo
 
-Check out our [live demo on Vercel](https://chariteth.vercel.app/) to experience Chariteth for yourself. 
+Check out our [live demo on Vercel](https://chariteth.vercel.app/) to experience Chariteth for yourself.
 
 ## Cloning and Running Locally
 
@@ -39,11 +42,13 @@ Ensure you have the following installed:
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/EmoBanana/chariteth.git
    ```
 
 2. **Navigate to the project directory**:
+
    ```bash
    cd chariteth
    ```

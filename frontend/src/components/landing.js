@@ -1,12 +1,30 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "./walletContext";
+import { useDencrypt } from "use-dencrypt-effect";
 import "./landing.css";
 
 const Landing = () => {
   const { account, isConnecting, error, connectWallet } = useWallet();
-  const marketSectionRef = useRef(null);
   const navigate = useNavigate();
+
+  const values = useMemo(
+    () => ["Trust.", "Impact.", "Control.", "Transparency."],
+    []
+  );
+  const [value, setValue] = useDencrypt("Transparency");
+
+  useEffect(() => {
+    let i = 0;
+
+    const action = setInterval(() => {
+      setValue(values[i]);
+
+      i = i === values.length - 1 ? 0 : i + 1;
+    }, 3000);
+
+    return () => clearInterval(action);
+  }, [setValue, values]);
 
   useEffect(() => {
     if (account) {
@@ -18,57 +36,32 @@ const Landing = () => {
     }
   }, [account, navigate]);
 
-  const scrollToMarket = () => {
-    marketSectionRef.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const choose = [
-    {
-      title: "Transparency & Accountability",
-      description:
-        "Funds are released only after charities meet milestones and provide proof, ensuring proper use of donations.",
-    },
-    {
-      title: "Blockchain Security",
-      description:
-        "Donations are securely stored in tamper-proof smart contracts, with all transactions recorded on the blockchain.",
-    },
-    {
-      title: "DAO Voting System",
-      description:
-        "Donors participate in project approvals through a decentralized voting system, giving them control over proposed cause.",
-    },
-    {
-      title: "Reward System for Donors",
-      description:
-        "Donors earn exclusive NFTs and experience points (XP) for their contributions, recognizing their support.",
-    },
-    {
-      title: "Milestone-based Disbursement",
-      description:
-        "Charities receive funds in stages as they reach milestones, ensuring accountability and progress.",
-    },
-    {
-      title: "KYC Verification for Fundraisers",
-      description:
-        "A thorough KYC process verifies fundraisers, ensuring only legitimate charities receive donations.",
-    },
-  ];
-
   return (
     <div className="landing-container">
-      <section className="hero-section">
+      <div className="intro-image-container">
+        <div alt="Landing" className="intro-image" />
+        <div alt="Landing" className="intro-image" />
+        <div alt="Landing" className="intro-image" />
+      </div>
+      <div className="hero-section">
         <div className="hero-content">
-          <h1 className="hero-title">
-            Charit<span className="highlight-text">eth</span>
-          </h1>
+          <div className="hero-text">
+            <h1 className="hero-title">
+              Charit<span className="highlight-text">eth</span>
+            </h1>
+            <h2 className="hero-desc">
+              Empowering Your Donations With {value}
+            </h2>
+          </div>
 
           {account ? (
-            <div className="wallet-connected-message">
-              Wallet Connected! Redirecting...
+            <div className="wallet-connected">
+              <div className="wallet-connected-message">
+                Wallet Connected! Redirecting...
+              </div>
             </div>
           ) : (
-            <div>
+            <div className="connect-wallet-container">
               <button
                 onClick={connectWallet}
                 disabled={isConnecting}
@@ -81,110 +74,41 @@ const Landing = () => {
             </div>
           )}
         </div>
-
-        <div className="scroll-indicator" onClick={scrollToMarket}>
-          <p className="scroll-text">Learn More</p>
-          <svg
-            className="scroll-arrow"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </div>
-      </section>
-
-      <section ref={marketSectionRef} className="market-section">
-        <div className="market-content">
-          <h2 className="section-title">
-            How Charit<span className="highlight-text">eth</span> Works
-          </h2>
-
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-number">1</div>
-              <h3 className="feature-title">Connect & Choose a Cause</h3>
-              <p className="feature-description">
-                Donors can connect their crypto wallets to the Chariteth
-                platform and browse through a list of charity projects. Each
-                project includes information such as its goals, milestones, and
-                the amount of funding needed. Donors can select causes they are
-                passionate about and donate using Ethereum.
-              </p>
+        <div className="slider-container">
+          <div className="slider">
+            <div className="slider-item">
+              0x9A102f88fF2C41ECebbfe9306566eF642A08d954 just donated 0.15ETH
             </div>
-
-            <div className="feature-card">
-              <div className="feature-number">2</div>
-              <h3 className="feature-title">
-                Milestone-based Fund Distribution
-              </h3>
-              <p className="feature-description">
-                Funds are securely held in a blockchain smart contract. As the
-                charity achieves specific milestones, such as reaching 25%, 50%,
-                or 100% of their goal, funds are released in stages. This
-                ensures transparency, as the charity must submit financial
-                records, proposals, and proof of work for approval at each
-                stage.
-              </p>
+            <div className="slider-item">
+              0x234544cFCD0e8Ebb4f1B8f754C44F9a0612Bf2C4 just donated 0.02ETH
             </div>
-
-            <div className="feature-card">
-              <div className="feature-number">3</div>
-              <h3 className="feature-title">Vote and Earn Rewards</h3>
-              <p className="feature-description">
-                For every 0.01 ETH donated, donors earn experience points (XP).
-                As donors level up by accumulating XP, they are rewarded with
-                unique NFTs. Donors also receive voting rights to help approve
-                new charity projects, giving them a say in how the funds are
-                allocated.
-              </p>
+            <div className="slider-item">
+              0xfE054e920B69e2D6d4D9B41919f13008B82426b5 just donated 0.07ETH
+            </div>
+            <div className="slider-item">
+              0xa5E55529A6D5d845Fd4787fc94FdFCc08470Fd58 just donated 0.1ETH
+            </div>
+            <div className="slider-item">
+              0x7A65eaf6e874E0849aeD1fB329714F46cB5F0149 just donated 0.03ETH
+            </div>
+            <div className="slider-item">
+              0xf4eD7fe12d1abE00Ce1C80712d2A328fC9e8AEeD just donated 0.06ETH
+            </div>
+            <div className="slider-item">
+              0x49999af5D33b07B9EF0BA418B969eb8F29914fAB just donated 0.12ETH
+            </div>
+            <div className="slider-item">
+              0x78109A506336535a6d7677a379064bB8c0dfD79c just donated 0.09ETH
+            </div>
+            <div className="slider-item">
+              0x68f635e7771399C9d9bA9988C15B4eccEfFb4f1D just donated 0.16ETH
+            </div>
+            <div className="slider-item">
+              0x1bd6dEFc3b0ea1F1d5206B77E01d8302dEA955c7 just donated 0.02ETH
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="choose-section">
-        <div className="container">
-          <h2 className="section-title">
-            Why Choose Charit<span className="highlight-text">eth</span>
-          </h2>
-          <div className="choose-grid">
-            {choose.map((item, index) => (
-              <div key={index} className="choose-card">
-                <div className="choose-icon">
-                  <i className={`fas fa-${item.icon}`}></i>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="cta-container">
-          <h3 className="cta-title">Ready to contribute to a cause?</h3>
-          <button
-            onClick={connectWallet}
-            disabled={account || isConnecting}
-            className="connect-button"
-          >
-            {account
-              ? "Wallet Connected"
-              : isConnecting
-              ? "Connecting..."
-              : "Connect Wallet"}
-          </button>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

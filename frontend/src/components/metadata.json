@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "tags": ["Education"],
+    "desc": "Teaching children computer skills is important for their future success. It helps them develop critical thinking, problem-solving abilities, and creativity. By learning how to use computers effectively, children can access a wealth of information and resources that can enhance their education and personal growth.",
+    "image": "children.jpg"
+  },
+  {
+    "id": 3,
+    "tags": ["Health", "Well-Being"],
+    "desc": "Providing fire extinguishers is crucial for safety in homes and workplaces. They can prevent small fires from becoming large disasters, protecting lives and property. Regular maintenance and training on how to use them effectively are essential for ensuring their reliability in emergencies.",
+    "image": "extinguisher.jpg"
+  },
+  {
+    "id": 5,
+    "tags": ["Animal Welfare"],
+    "desc": "Supporting animal welfare means protecting and improving the lives of animals through rescue, rehabilitation, and advocacy. Your contributions help fund shelters, medical treatment, food, and adoption services for stray, abused, or endangered animals.",
+    "image": "dog.jpg"
+  },
+  {
+    "id": 6,
+    "tags": ["Disaster Relief"],
+    "desc": "Disaster relief efforts provide urgent support to communities affected by natural or man-made disasters. Donations go toward emergency supplies, medical aid, food, shelter, and long-term rebuilding. Whether it's floods, earthquakes, or conflict zones, your help ensures that affected individuals receive immediate care and a path to recovery.",
+    "image": "flood.jpg"
+  }
+]

@@ -197,28 +197,6 @@ const KYCProposalForm = ({ contract, account }) => {
       </div>
 
       <div className="form-group">
-        <label>Identity Number</label>
-        <input
-          type="text"
-          name="identityNumber"
-          value={kycFormData.identityNumber}
-          onChange={handleKYCInputChange}
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Phone Number</label>
-        <input
-          type="tel"
-          name="phoneNumber"
-          value={kycFormData.phoneNumber}
-          onChange={handleKYCInputChange}
-          required
-        />
-      </div>
-
-      <div className="form-group">
         <label>Email</label>
         <input
           type="email"
@@ -230,7 +208,7 @@ const KYCProposalForm = ({ contract, account }) => {
       </div>
 
       <div className="form-group">
-        <label>Social Handle</label>
+        <label>Social Link</label>
         <input
           type="text"
           name="socialHandle"

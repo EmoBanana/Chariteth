@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ethers } from "ethers";
 import { useWallet } from "./walletContext";
 import "./home.css";
 
 import CharitethABI from "./CharitethABI.json";
+import featured from "./featured.json";
+import metaData from "./metadata.json";
 
 const CHARITETH_CONTRACT_ADDRESS = "0x2cCeDa75225400BbCBE2401e52dA15627a93f14a";
 const MAX_PROJECTS_TO_FETCH = 10;
@@ -14,6 +16,11 @@ const OngoingProjects = () => {
   const [ongoingProjects, setOngoingProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const carouselRef = useRef(null);
+
+  const extendedFeatured = [...featured, featured[0]];
 
   useEffect(() => {
     const fetchOngoingProjects = async () => {
@@ -34,7 +41,6 @@ const OngoingProjects = () => {
         let i = 1;
         let ongoingCount = 0;
 
-        // Fetch details for proposals, stop at 5 ongoing projects or when no more proposals exist
         while (
           i <= MAX_PROJECTS_TO_FETCH &&
           ongoingCount < MAX_PROJECTS_TO_FETCH
@@ -78,7 +84,32 @@ const OngoingProjects = () => {
     };
 
     fetchOngoingProjects();
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [provider]);
+
+  useEffect(() => {
+    if (currentIndex === extendedFeatured.length - 1) {
+      const timeout = setTimeout(() => {
+        if (carouselRef.current) {
+          carouselRef.current.style.transition = "none";
+          setCurrentIndex(0);
+          setTimeout(() => {
+            if (carouselRef.current) {
+              carouselRef.current.style.transition =
+                "transform 0.5s ease-in-out";
+            }
+          }, 50);
+        }
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, extendedFeatured.length]);
 
   const handleDonate = async (proposalId) => {
     if (!account) {
@@ -118,6 +149,16 @@ const OngoingProjects = () => {
     }
   };
 
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % extendedFeatured.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? extendedFeatured.length - 2 : prevIndex - 1
+    );
+  };
+
   if (loading) {
     return <div className="home-loading">Loading ongoing projects...</div>;
   }
@@ -130,6 +171,18 @@ const OngoingProjects = () => {
     return <div className="home-no-projects">No ongoing projects found.</div>;
   }
 
+  const openPopup = (project) => {
+    setSelectedProject(project);
+  };
+
+  const closePopup = () => {
+    setSelectedProject(null);
+  };
+
+  const metadata = selectedProject
+    ? metaData.find((item) => item.id === selectedProject.id)
+    : null;
+
   return (
     <div className="home-ongoing-projects-container">
       <h1 className="home-ongoing-projects-title">
@@ -138,58 +191,175 @@ const OngoingProjects = () => {
           <span>Earn 1 XP per 0.01 ETH donated</span>
         </div>
       </h1>
-      <div className="home-project-grid">
-        {ongoingProjects.map((project) => (
-          <div key={project.id} className="home-project-card">
-            <div className="home-project-header">
-              <h2>{project.title}</h2>
-            </div>
-
-            <div className="home-project-summary">
-              <p>Creator: {project.creator}</p>
-              <p>Created: {project.creationTime}</p>
-              <p>
-                Funding Goal: {ethers.utils.formatEther(project.fundingGoal)}{" "}
-                ETH
-              </p>
-              <div className="home-fundraising-progress">
-                <p>
-                  Raised: {ethers.utils.formatEther(project.totalRaised)} ETH /{" "}
-                  {ethers.utils.formatEther(project.fundingGoal)} ETH
-                </p>
-                <div className="home-progress-bar">
-                  <div
-                    className="home-progress-bar-fill"
-                    style={{
-                      width: `${
-                        (Number(ethers.utils.formatEther(project.totalRaised)) /
-                          Number(
-                            ethers.utils.formatEther(project.fundingGoal)
-                          )) *
-                        100
-                      }%`,
-                    }}
-                  />
+      <div className="home-projects-carousel">
+        <button
+          className="carousel-nav-button prev"
+          onClick={prevSlide}
+          aria-label="Previous slide"
+        >
+          ‹
+        </button>
+        <div className="home-projects-carousel-inner">
+          <div
+            className="home-carousel-cards"
+            ref={carouselRef}
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {extendedFeatured.map((project, index) => (
+              <div
+                key={`${project.id}-${index}`}
+                className="home-carousel-card"
+              >
+                <img
+                  src={`/${project.image}`}
+                  className="carousel-image"
+                  alt={project.title}
+                />
+                <div className="carousel-content">
+                  <h2>{project.title}</h2>
+                  <p className="carousel-desc">{project.description}</p>
+                  <div className="carousel-goal">
+                    <p>Funding Goal:</p>
+                    <p className="carousel-goal-fund">{project.goal}</p>
+                  </div>
+                  <button
+                    className="home-donate-button"
+                    onClick={() => handleDonate(project.id)}
+                    disabled={!account}
+                  >
+                    {account ? "Donate" : "Connect Wallet"}
+                  </button>
                 </div>
               </div>
-              <p>Current Milestone: {Number(project.currentMilestone) + 1}</p>
+            ))}
+          </div>
+        </div>
+        <button
+          className="carousel-nav-button next"
+          onClick={nextSlide}
+          aria-label="Next slide"
+        >
+          ›
+        </button>
+      </div>
+      <div className="home-project-grid">
+        {ongoingProjects.map((project) => {
+          const metadata = metaData.find((item) => item.id === project.id);
+
+          return (
+            <div
+              key={project.id}
+              className="home-project-card"
+              onClick={() => openPopup(project)}
+            >
+              {metadata?.image && (
+                <div className="home-project-image">
+                  <img
+                    src={metadata.image}
+                    alt={`${project.title}`}
+                    className="project-image"
+                  />
+                </div>
+              )}
+
+              <div className="home-project-summary">
+                <div className="home-project-title">
+                  <h1>{project.title}</h1>
+                </div>
+                <p>
+                  Funding Goal: {ethers.utils.formatEther(project.fundingGoal)}{" "}
+                  ETH
+                </p>
+                <div className="home-fundraising-progress">
+                  <p>
+                    Raised: {ethers.utils.formatEther(project.totalRaised)} ETH
+                    / {ethers.utils.formatEther(project.fundingGoal)} ETH
+                  </p>
+                  <div className="home-progress-bar">
+                    <div
+                      className="home-progress-bar-fill"
+                      style={{
+                        width: `${
+                          (Number(
+                            ethers.utils.formatEther(project.totalRaised)
+                          ) /
+                            Number(
+                              ethers.utils.formatEther(project.fundingGoal)
+                            )) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </div>
+                  <button
+                    className="home-donate-button"
+                    onClick={() => handleDonate(project.id)}
+                    disabled={!account}
+                  >
+                    {account ? "Donate" : "Connect Wallet"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {selectedProject && (
+        <div className="popup-overlay" onClick={closePopup}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="popup-close-button" onClick={closePopup}>
+              ×
+            </button>
+
+            <div className="popup-image">
+              <img src={metadata.image} alt={`${selectedProject.title}`}></img>
             </div>
 
-            {project.description && (
-              <div className="home-project-details">
-                <p>{project.description}</p>
+            <div className="popup-summary">
+              <h1>{selectedProject.title}</h1>
+              <p>{metadata.desc}</p>
+              <p>Creator: {selectedProject.creator}</p>
+              <p>
+                Funding Goal:{" "}
+                {ethers.utils.formatEther(selectedProject.fundingGoal)} ETH
+              </p>
+              <p>
+                Raised: {ethers.utils.formatEther(selectedProject.totalRaised)}{" "}
+                ETH / {ethers.utils.formatEther(selectedProject.fundingGoal)}{" "}
+                ETH
+              </p>
+              <div className="home-progress-bar">
+                <div
+                  className="home-progress-bar-fill"
+                  style={{
+                    width: `${
+                      (Number(
+                        ethers.utils.formatEther(selectedProject.totalRaised)
+                      ) /
+                        Number(
+                          ethers.utils.formatEther(selectedProject.fundingGoal)
+                        )) *
+                      100
+                    }%`,
+                  }}
+                />
+              </div>
+
+              <div className="popup-buttons">
+                <button className="home-donate-button">Generate Summary</button>
                 <button
                   className="home-donate-button"
-                  onClick={() => handleDonate(project.id)}
+                  onClick={() => handleDonate(selectedProject.id)}
                   disabled={!account}
                 >
                   {account ? "Donate" : "Connect Wallet"}
                 </button>
               </div>
-            )}
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
