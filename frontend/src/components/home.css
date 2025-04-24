@@ -414,7 +414,7 @@ body {
 }
 
 .thank-you-popup-content {
-  background: white;
+  background: linear-gradient(to top, #e3dfff, #ffffff);
   padding: 2rem;
   padding-bottom: 3rem;
   border: 2px solid black;
@@ -426,9 +426,10 @@ body {
 }
 
 .thank-you-popup-content h2 {
+  margin-top: 0rem;
   margin-bottom: 1rem;
   font-family: "Futura";
-  font-size: 1.8rem;
+  font-size: 2.6rem;
   color: #4caf50;
 }
 
@@ -438,21 +439,23 @@ body {
   font-size: 1.2rem;
   color: black;
   text-align: center;
+  line-height: 1.8rem;
+  text-align: justify;
 }
 
 .close-popup-button {
-  background: #4caf50;
-  color: white;
-  border: none;
+  background: white;
+  color: black;
+  border: 2px solid black;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
-  font-size: "Medium";
-  font-size: 1rem;
+  font-family: "Medium";
+  font-size: 1.1rem;
 }
 
 .close-popup-button:hover {
-  background: #45a049;
+  background: #dbdbdb;
 }
 
 .ai-summary-container {
@@ -533,6 +536,40 @@ body {
 
 .milestone-card {
   margin-top: 2.6rem;
+}
+
+.footer-cta {
+  background-color: #f1f5f9;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.footer-cta h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.footer-cta p {
+  margin-bottom: 1rem;
+  color: #475569;
+}
+
+.cta-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #1d4ed8;
 }
 
 @media (max-width: 768px) {

@@ -127,14 +127,69 @@ app.post("/api/generate-summary", async (req, res) => {
 });
 
 app.post("/api/generate-thank-you", async (req, res) => {
-  const { title, description, donationAmount } = req.body;
+  const { title, donationAmount } = req.body;
 
-  // Example AI-generated message
-  const message = `That's fire! You just donated ${donationAmount} ETH to "${title}". Your contribution will help ${Math.floor(
-    donationAmount * 200
-  )} people!`;
+  if (!title || !donationAmount) {
+    return res.status(400).json({ error: "Missing title or donation amount" });
+  }
 
-  res.json({ message });
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("API key is missing");
+      return res
+        .status(500)
+        .json({ error: "Server configuration error: Missing API key" });
+    }
+
+    const genAI = new GoogleGenAI({ apiKey });
+
+    // ETH to RM conversion
+    const ethAmount = parseFloat(donationAmount);
+    const rmAmount = ethAmount * 8000;
+
+    const content = `Generate an exciting, heartwarming thank you message for a charity donor.
+
+Context:
+- The project title is "${title}".
+- The donor donated ${ethAmount} ETH (~RM${rmAmount}).
+- Make it sound personalized and enthusiastic.
+- Quantify the impact based on donation size if you can (e.g., "helped plant 2 trees", "helped 5 families", etc.)
+- Keep it short (1-2 sentences), around 30 words.
+
+Only return the pure message text without any JSON or additional formatting. No explanations.`;
+
+    console.log("Sending prompt to Gemini:", content);
+
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: content,
+    });
+
+    const textResponse = response.candidates[0].content.parts[0].text.trim();
+
+    console.log("Gemini Thank You Message:", textResponse);
+
+    res.json({ message: textResponse });
+  } catch (error) {
+    console.error("Error generating thank-you message:", error.message);
+
+    const errorDetails = error.response
+      ? {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        }
+      : { message: error.message };
+
+    console.error("Error details:", JSON.stringify(errorDetails, null, 2));
+
+    res.status(500).json({
+      error: "Failed to generate thank-you message",
+      details: error.message,
+      errorInfo: errorDetails,
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3001;

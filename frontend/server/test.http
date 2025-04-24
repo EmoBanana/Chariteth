@@ -1,12 +1,7 @@
-POST http://localhost:3001/api/generate-summary
+POST http://localhost:3001/api/generate-thank-you
 Content-Type: application/json
 
 {
-  "project": {
-    "title": "Provide Fire Extinguisher",
-    "description": "Fire Safety",
-    "fundingGoal": "5",
-    "totalRaised": "2.5",
-    "creator": "0x1234..."
-  }
+  "title": "Plant Trees",
+  "donationAmount": 0.03
 }

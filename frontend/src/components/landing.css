@@ -30,16 +30,43 @@
   position: absolute;
   display: flex;
   flex-direction: row;
-  gap: 1rem;
-  margin-left: 40rem;
+  justify-content: center;
+  align-items: center;
+  gap: 4.8rem;
+  margin-left: 30rem;
   margin-top: 3rem;
 }
 
 .intro-image {
-  justify-content: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 20rem;
   height: 15rem;
-  background-color: #cdc7fc;
+}
+
+.intro-image:last-child {
+  margin-left: 1rem;
+}
+
+.intro-image img {
+  object-fit: cover;
+  width: auto;
+  height: 12.5rem;
+  border: 2px solid black;
+  box-shadow: #cdc7fc 1rem 1rem;
+}
+
+.intro-image h1 {
+  position: absolute;
+  top: 11.5rem;
+  margin-left: 18rem;
+  background-color: white;
+  border: 2px solid black;
+  padding: 0 1rem;
+  font-size: 1.6rem;
+  transform: rotate(-8deg);
+  box-shadow: black 0.4rem 0.4rem;
 }
 
 .hero-section {

@@ -178,11 +178,26 @@ const OngoingProjects = () => {
       const tx = await contract.donate(proposalId, { value: donationWei });
       await tx.wait();
 
+      setOngoingProjects((prevProjects) =>
+        prevProjects.map((project) =>
+          project.id === proposalId
+            ? {
+                ...project,
+                totalRaised: ethers.BigNumber.from(project.totalRaised).add(
+                  donationWei
+                ),
+              }
+            : project
+        )
+      );
+
       // Generate a thank-you message using AI
       const proposal = ongoingProjects.find(
         (project) => project.id === proposalId
       );
       const message = await generateThankYouMessage(proposal, donationAmount);
+
+      setSelectedProject(null);
 
       // Show the thank-you popup
       setThankYouMessage(message);
@@ -229,7 +244,7 @@ const OngoingProjects = () => {
       }
 
       const data = await response.json();
-      return data.message; // Example: "That's fire! You just helped 2 families with their meals."
+      return data.message;
     } catch (error) {
       console.error("Error generating thank-you message:", error);
       return "Thank you for your donation!";
@@ -484,7 +499,7 @@ const OngoingProjects = () => {
                     className="home-donate-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      fake(project.id);
+                      handleDonate(project.id);
                     }}
                     disabled={!account}
                   >
@@ -495,6 +510,17 @@ const OngoingProjects = () => {
             </div>
           );
         })}
+      </div>
+
+      <div class="footer-cta">
+        <h3>💼 Make Giving a Habit</h3>
+        <p>
+          Set up recurring donations and get monthly CSR reports — effortless,
+          impactful, and transparent.
+        </p>
+        <a href="/corporate-donation" class="cta-button">
+          Start Now
+        </a>
       </div>
 
       {isThankYouPopupVisible && (

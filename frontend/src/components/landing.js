@@ -39,9 +39,18 @@ const Landing = () => {
   return (
     <div className="landing-container">
       <div className="intro-image-container">
-        <div alt="Landing" className="intro-image" />
-        <div alt="Landing" className="intro-image" />
-        <div alt="Landing" className="intro-image" />
+        <div alt="Landing" className="intro-image">
+          <img src="/vote.png"></img>
+          <h1>Vote</h1>
+        </div>
+        <div alt="Landing" className="intro-image">
+          <img src="/donate.png"></img>
+          <h1>Donate</h1>
+        </div>
+        <div alt="Landing" className="intro-image">
+          <img src="/children.jpg"></img>
+          <h1>Impact</h1>
+        </div>
       </div>
       <div className="hero-section">
         <div className="hero-content">
