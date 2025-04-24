@@ -25,6 +25,8 @@ const OngoingProjects = () => {
   const [impactScore, setImpactScore] = useState(null);
   const [isSummaryLoading, setIsSummaryLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState("Ongoing");
+  const [thankYouMessage, setThankYouMessage] = useState(null);
+  const [isThankYouPopupVisible, setIsThankYouPopupVisible] = useState(false);
   const carouselRef = useRef(null);
 
   const extendedFeatured = [...featured, featured[0]];
@@ -152,16 +154,67 @@ const OngoingProjects = () => {
       const tx = await contract.donate(proposalId, { value: donationWei });
       await tx.wait();
 
-      // Optional: If there's a separate XP tracking method in the contract
-      if (contract.awardXP) {
-        await contract.awardXP(account, xpEarned);
-      }
+      // Generate a thank-you message using AI
+      const proposal = ongoingProjects.find(
+        (project) => project.id === proposalId
+      );
+      const message = await generateThankYouMessage(proposal, donationAmount);
+
+      // Show the thank-you popup
+      setThankYouMessage(message);
+      setIsThankYouPopupVisible(true);
 
       alert(`Donation successful! You earned ${xpEarned} XP.`);
     } catch (error) {
       console.error("Donation error:", error);
       alert(`Donation failed: ${error.message}`);
     }
+  };
+
+  const fake = async (proposalId) => {
+    const donationAmount = 0.01;
+    const proposal = ongoingProjects.find(
+      (project) => project.id === proposalId
+    );
+    const message = await generateThankYouMessage(proposal, donationAmount);
+
+    // Show the thank-you popup
+    setThankYouMessage(message);
+    setIsThankYouPopupVisible(true);
+  };
+
+  const generateThankYouMessage = async (proposal, donationAmount) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/generate-thank-you",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: proposal.title,
+            description: proposal.description,
+            donationAmount,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate thank-you message");
+      }
+
+      const data = await response.json();
+      return data.message; // Example: "That's fire! You just helped 2 families with their meals."
+    } catch (error) {
+      console.error("Error generating thank-you message:", error);
+      return "Thank you for your donation!";
+    }
+  };
+
+  const closeThankYouPopup = () => {
+    setIsThankYouPopupVisible(false);
+    setThankYouMessage(null);
   };
 
   const nextSlide = () => {
@@ -406,7 +459,7 @@ const OngoingProjects = () => {
                     className="home-donate-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDonate(project.id);
+                      fake(project.id);
                     }}
                     disabled={!account}
                   >
@@ -418,6 +471,21 @@ const OngoingProjects = () => {
           );
         })}
       </div>
+
+      {isThankYouPopupVisible && (
+        <div className="thank-you-popup-overlay" onClick={closeThankYouPopup}>
+          <div
+            className="thank-you-popup-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>Thank You!</h2>
+            <p>{thankYouMessage}</p>
+            <button className="close-popup-button" onClick={closeThankYouPopup}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {selectedProject && (
         <div className="popup-overlay" onClick={closePopup}>
@@ -477,6 +545,9 @@ const OngoingProjects = () => {
                       : aiSummary
                       ? "Regenerate Summary"
                       : "Generate Summary"}
+                  </button>
+                  <button className="home-donate-button">
+                    Feature Project
                   </button>
                   <button
                     className="home-donate-button"

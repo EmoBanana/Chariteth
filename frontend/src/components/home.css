@@ -156,7 +156,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  max-width: 1400px;
+  max-width: max-content;
   margin: 0 auto;
   margin-top: -1rem;
   margin-bottom: 3rem;
@@ -278,7 +278,8 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: "Supply";
+  font-family: "Medium";
+  font-size: 1rem;
 }
 
 .home-donate-button:hover {
@@ -376,6 +377,7 @@ body {
 .popup-buttons button {
   font-family: "Medium";
   font-size: 1.1rem;
+  text-wrap: nowrap;
 }
 
 .popup-close-button {
@@ -390,6 +392,61 @@ body {
 
 .popup-close-button:hover {
   color: red;
+}
+
+.thank-you-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.thank-you-popup-content {
+  background: white;
+  padding: 2rem;
+  padding-bottom: 3rem;
+  border: 2px solid black;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+}
+
+.thank-you-popup-content h2 {
+  margin-bottom: 1rem;
+  font-family: "Futura";
+  font-size: 1.8rem;
+  color: #4caf50;
+}
+
+.thank-you-popup-content p {
+  font-family: "Medium";
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  color: black;
+  text-align: center;
+}
+
+.close-popup-button {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: "Medium";
+  font-size: 1rem;
+}
+
+.close-popup-button:hover {
+  background: #45a049;
 }
 
 .ai-summary-container {

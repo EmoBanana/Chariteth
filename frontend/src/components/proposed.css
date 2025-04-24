@@ -13,13 +13,14 @@
 }
 
 .proposed-projects-container {
-  max-width: 80vw;
+  max-width: 1400px;
   margin: 0 auto;
+  padding-bottom: 3rem;
 }
 
 .proposed-projects-container h1 {
   text-align: center;
-  color: #333;
+  color: black;
   margin-top: 2rem;
   margin-bottom: 3rem;
   font-family: "Futura";
@@ -27,76 +28,82 @@
 }
 
 .proposal-grid {
+  max-width: 1400px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 450px));
   gap: 1.5rem;
 }
 
 .proposal-card {
+  display: flex;
+  flex-direction: column;
   background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgb(180, 180, 180);
+  cursor: pointer;
+  font-family: "Futura";
 }
 
 .proposal-card:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.proposal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background-color: #afa7f5;
-  color: white;
-  cursor: pointer;
+.proposed-project-image {
+  margin: 0 auto;
+  margin-top: 1.2rem;
+  height: auto;
+  width: 92%;
 }
 
-.proposal-header h2 {
-  margin: 0;
-  color: white;
-  font-size: 1.3rem;
-}
-
-.expand-icon {
-  color: #7f8c8d;
+.proposed-project-image img {
+  height: 15rem;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .proposal-summary {
-  padding: 1rem;
+  padding: 0 1rem;
+  padding-bottom: 2rem;
+  margin-top: -1rem;
   font-family: "Futura";
-  font-size: 0.9rem;
 }
 
-.vote-progress {
+.proposed-project-title h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.proposed-project-summary p,
+.proposal-summary p,
+.proposal-details p {
+  color: black;
+  font-family: "Medium";
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.proposed-vote-progress {
   margin-top: 1rem;
 }
 
-.progress-bar {
+.proposed-progress-bar {
   width: 100%;
-  height: 10px;
+  height: 15px;
   background-color: #e0e0e0;
-  border-radius: 5px;
+  border-radius: 10px;
   overflow: hidden;
+  margin-bottom: 1.5rem;
 }
 
-.progress-bar-fill {
+.proposed-progress-bar-fill {
   height: 100%;
-  background-color: #afa7f5;
-  transition: width 0.5s ease;
-}
-
-.proposal-details {
-  padding: 1rem;
-  background-color: #f1f1f1;
-}
-
-.proposal-details p {
-  color: #34495e;
-  margin-bottom: 1rem;
-  font-family: "Futura";
+  background-color: #9890da;
+  transition: width 0.5s ease-in-out;
 }
 
 .donate-button {
@@ -105,10 +112,12 @@
   background-color: #afa7f5;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px; /* match with .home-donate-button */
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: "Supply";
+  font-family: "Medium";
+  font-size: 1rem;
 }
 
 .donate-button:hover {
@@ -116,14 +125,41 @@
 }
 
 .donate-button:disabled {
-  background-color: #bdc3c7;
+  background-color: #95a5a6;
   cursor: not-allowed;
 }
 
-.loading,
-.no-proposals {
+.proposed-popup-title {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.proposed-popup-desc {
+  margin-top: -2rem;
+}
+
+.loading {
   text-align: center;
   padding: 3rem;
   color: #7f8c8d;
+  font-family: "Futura";
+}
+
+.no-proposals {
+  font-size: 1.4rem;
+  text-align: center;
+  padding-bottom: 2rem;
+  color: #707070;
+  font-family: "Futura";
+}
+
+.proposal-card-expired {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgb(180, 180, 180);
   font-family: "Futura";
 }

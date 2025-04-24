@@ -126,6 +126,17 @@ app.post("/api/generate-summary", async (req, res) => {
   }
 });
 
+app.post("/api/generate-thank-you", async (req, res) => {
+  const { title, description, donationAmount } = req.body;
+
+  // Example AI-generated message
+  const message = `That's fire! You just donated ${donationAmount} ETH to "${title}". Your contribution will help ${Math.floor(
+    donationAmount * 200
+  )} people!`;
+
+  res.json({ message });
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
