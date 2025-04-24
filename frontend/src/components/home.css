@@ -331,6 +331,8 @@ body {
   padding: 2rem;
   border-radius: 16px;
   max-width: 1000px;
+  max-height: 75vh;
+  overflow-y: auto;
   width: 90%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -394,6 +396,10 @@ body {
   color: red;
 }
 
+.check-button {
+  margin-bottom: 0.5rem;
+}
+
 .thank-you-popup-overlay {
   position: fixed;
   top: 0;
@@ -453,6 +459,7 @@ body {
   border: 2px solid rgb(192, 192, 192);
   border-radius: 16px;
   padding: 0 2rem;
+  padding-bottom: 2rem;
   margin-top: 1rem;
   height: 14rem;
   width: 80%;
@@ -492,7 +499,42 @@ body {
   background-color: green;
 }
 
-/* Responsive Adjustments */
+.milestone-section {
+  border: 2px solid rgb(192, 192, 192);
+  border-radius: 16px;
+  padding: 0 2rem;
+  padding-bottom: 2rem;
+  margin-top: 2rem;
+  height: max-content;
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.milestone-section h1 {
+  font-family: "Futura";
+  font-size: 1.8rem;
+  line-height: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.milestone-section p {
+  font-family: "Medium";
+  font-size: 1.1rem;
+}
+
+.milestone-section .milestone-percent {
+  margin-bottom: -1.2rem;
+}
+
+.milestone-section .milestone-title {
+  font-family: "Futura";
+  line-height: 1.4rem;
+}
+
+.milestone-card {
+  margin-top: 2.6rem;
+}
+
 @media (max-width: 768px) {
   .home-project-grid {
     grid-template-columns: 1fr;

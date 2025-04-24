@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallet } from "./walletContext";
 import "./proposed.css";
-import metaData from "./metadata.json";
+import metaData from "./proposedData.json";
 
 import CharitethABI from "./CharitethABI.json";
 

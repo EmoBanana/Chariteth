@@ -6,22 +6,10 @@
     "image": "children.jpg"
   },
   {
-    "id": 2,
-    "tags": ["Well-Being"],
-    "desc": "Repainting worn-out railings helps improve public spaces by enhancing both safety and aesthetics. This project aimed to refresh the environment, demonstrating how small acts of care can contribute to a cleaner and more welcoming community.",
-    "image": "railing.jpg"
-  },
-  {
     "id": 3,
     "tags": ["Safety"],
     "desc": "Providing fire extinguishers is crucial for safety in homes and workplaces. They can prevent small fires from becoming large disasters, protecting lives and property. Regular maintenance and training on how to use them effectively are essential for ensuring their reliability in emergencies.",
     "image": "extinguisher.jpg"
-  },
-  {
-    "id": 4,
-    "tags": ["Youth Support"],
-    "desc": "Donating essential items to an orphanage helps support the daily needs and development of children. Contributions like food, clothes, and supplies can make a meaningful difference in improving their quality of life and well-being.",
-    "image": "orphanage.jpg"
   },
   {
     "id": 5,

@@ -1,0 +1,97 @@
+.timeline-container {
+  position: relative;
+  margin-top: 2rem;
+  padding-left: 0.5rem;
+  padding-right: 1rem;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 26px; /* centers behind the icons */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #d0d0d0;
+  z-index: 0;
+}
+
+.milestone-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.milestone-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.milestone-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: -0.15rem;
+}
+
+.icon-completed {
+  background-color: green;
+  color: white;
+}
+
+.icon-pending {
+  background-color: white;
+  color: black;
+}
+
+.milestone-details {
+  font-family: "Medium";
+  flex: 1;
+}
+
+.milestone-details .milestone-title {
+  font-family: "Futura";
+  font-size: 1.2rem;
+  color: black;
+  margin-bottom: 0.4rem;
+}
+
+.title-completed {
+  color: #1a73e8;
+}
+
+.milestone-details .milestone-subtitle {
+  font-size: 1.2rem;
+  color: black;
+  margin-bottom: 6px;
+}
+
+.milestone-status .milestone-timestamp {
+  font-size: 13px;
+  color: #909090;
+  margin-bottom: 6px;
+}
+
+.milestone-action {
+  align-self: flex-end;
+  font-family: "Medium";
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 14px;
+  border: 2px solid black;
+  border-radius: 8px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+}
+
+.milestone-details > div {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: #555;
+}

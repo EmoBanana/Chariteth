@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ethers } from "ethers";
 import { useWallet } from "./walletContext";
 import "./home.css";
+import MilestoneTracker from "./milestone";
 
 import CharitethABI from "./CharitethABI.json";
 import featured from "./featured.json";
@@ -27,6 +28,7 @@ const OngoingProjects = () => {
   const [selectedTag, setSelectedTag] = useState("Ongoing");
   const [thankYouMessage, setThankYouMessage] = useState(null);
   const [isThankYouPopupVisible, setIsThankYouPopupVisible] = useState(false);
+  const [showMilestones, setShowMilestones] = useState(false);
   const carouselRef = useRef(null);
 
   const extendedFeatured = [...featured, featured[0]];
@@ -60,6 +62,27 @@ const OngoingProjects = () => {
 
             // Filter for active proposals (status 1)
             if (proposal.status === 1 && proposal.title !== "") {
+              const milestones = proposal.milestones.map((milestone) => ({
+                title: milestone.title,
+                description: milestone.description,
+                percentage: milestone.percentage.toNumber(),
+                fundsAllocated: milestone.fundsAllocated,
+                documentHash: milestone.documentHash,
+                status: milestone.status,
+                submissionTime:
+                  milestone.submissionTime.toNumber() > 0
+                    ? new Date(
+                        milestone.submissionTime.toNumber() * 1000
+                      ).toLocaleDateString("en-GB")
+                    : null,
+                approvalDeadline:
+                  milestone.approvalDeadline.toNumber() > 0
+                    ? new Date(
+                        milestone.approvalDeadline.toNumber() * 1000
+                      ).toLocaleDateString("en-GB")
+                    : null,
+              }));
+
               projects.push({
                 id: i,
                 title: proposal.title,
@@ -71,6 +94,7 @@ const OngoingProjects = () => {
                 creationTime: new Date(
                   proposal.creationTime.toNumber() * 1000
                 ).toLocaleDateString("en-GB"),
+                milestones: milestones,
               });
               ongoingCount++;
             }
@@ -318,6 +342,7 @@ const OngoingProjects = () => {
     setSelectedProject(null);
     setAiSummary(null);
     setImpactScore(null);
+    setShowMilestones(false);
   };
 
   const metadata = selectedProject
@@ -534,6 +559,13 @@ const OngoingProjects = () => {
                   />
                 </div>
 
+                <button
+                  className="home-donate-button check-button"
+                  onClick={() => setShowMilestones(!showMilestones)}
+                >
+                  {showMilestones ? "Hide Milestones" : "Check Milestones"}
+                </button>
+
                 <div className="popup-buttons">
                   <button
                     className="home-donate-button"
@@ -580,6 +612,31 @@ const OngoingProjects = () => {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+            {showMilestones && (
+              <div className="milestone-section">
+                <h1>Project Milestones</h1>
+                <p className="milestone-percent">
+                  Current funding progress:{" "}
+                  {(Number(
+                    ethers.utils.formatEther(selectedProject.totalRaised)
+                  ) /
+                    Number(
+                      ethers.utils.formatEther(selectedProject.fundingGoal)
+                    )) *
+                    100}
+                  %
+                </p>
+
+                <div className="milestone-card">
+                  <MilestoneTracker
+                    milestones={selectedProject.milestones}
+                    currentMilestone={selectedProject.currentMilestone}
+                    projectId={selectedProject.id}
+                  />
+                </div>
               </div>
             )}
           </div>
