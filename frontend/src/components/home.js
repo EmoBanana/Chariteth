@@ -513,7 +513,7 @@ const OngoingProjects = () => {
       </div>
 
       <div class="footer-cta">
-        <h3>💼 Make Giving a Habit</h3>
+        <h3>Are You A Company Looking To Make Giving a Habit?</h3>
         <p>
           Set up recurring donations and get monthly CSR reports — effortless,
           impactful, and transparent.

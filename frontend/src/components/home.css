@@ -34,7 +34,7 @@ body {
 .home-ongoing-projects-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 3rem;
+  overflow-x: hidden;
 }
 
 .home-ongoing-projects-title {
@@ -539,29 +539,36 @@ body {
 }
 
 .footer-cta {
-  background-color: #f1f5f9;
+  position: relative; /* Ensure it stays in the normal document flow */
+  width: 100vw; /* Full viewport width */
+  left: 50%; /* Move it to the center of the viewport */
+  transform: translateX(-50%); /* Adjust for centering */
+  background: none;
   padding: 2rem;
+  padding-bottom: 6rem;
   text-align: center;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
+  margin: 0;
+  margin-top: 3rem;
 }
 
 .footer-cta h3 {
+  font-family: "Futura";
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .footer-cta p {
-  margin-bottom: 1rem;
+  font-family: "Medium";
+  margin-bottom: 2.4rem;
   color: #475569;
 }
 
 .cta-button {
-  background-color: #2563eb;
-  color: white;
+  background-color: white;
+  color: black;
   padding: 0.75rem 1.5rem;
+  border: 2px solid black;
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: 500;
