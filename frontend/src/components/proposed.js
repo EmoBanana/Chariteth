@@ -326,8 +326,20 @@ const ProposedProjects = () => {
                   {selectedProject.title}
                 </h1>
                 <p className="proposed-popup-desc">{metadata.desc}</p>
-                <p>Creator: {selectedProject.creator}</p>
-                <p>Voting deadline: {selectedProject.votingDeadline}</p>
+                <p>
+                  Creator:{" "}
+                  <a
+                    href="https://www.linkedin.com/in/nwy1008/"
+                    target="_blank"
+                    className="creator-link"
+                  >
+                    {selectedProject.creator}
+                  </a>
+                </p>
+                <p>
+                  Voting deadline:{" "}
+                  {selectedProject.votingDeadline?.toLocaleDateString("en-GB")}
+                </p>
                 <p>
                   Funding Goal:{" "}
                   {ethers.utils.formatEther(selectedProject.fundingGoal)} ETH

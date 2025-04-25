@@ -539,10 +539,10 @@ body {
 }
 
 .footer-cta {
-  position: relative; /* Ensure it stays in the normal document flow */
-  width: 100vw; /* Full viewport width */
-  left: 50%; /* Move it to the center of the viewport */
-  transform: translateX(-50%); /* Adjust for centering */
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
   background: none;
   padding: 2rem;
   padding-bottom: 6rem;
@@ -554,12 +554,13 @@ body {
 .footer-cta h3 {
   font-family: "Futura";
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
 }
 
 .footer-cta p {
   font-family: "Medium";
+  font-size: 1.1rem;
   margin-bottom: 2.4rem;
   color: #475569;
 }
@@ -573,10 +574,11 @@ body {
   text-decoration: none;
   font-weight: 500;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .cta-button:hover {
-  background-color: #1d4ed8;
+  background-color: #dbdbdb;
 }
 
 @media (max-width: 768px) {

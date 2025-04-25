@@ -21,6 +21,18 @@
   font-size: 1.5rem;
 }
 
+.kyc-form h2 {
+  text-align: center;
+}
+
+.kyc-form-box {
+  background-color: white;
+  border: 2px solid rgb(180, 180, 180);
+  border-radius: 16px;
+  padding: 2rem;
+  padding-right: 3.1rem;
+}
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -41,6 +53,36 @@
   border-radius: 4px;
   font-family: "Supply";
   font-size: 1.2rem;
+}
+
+.form-group .file {
+  font-family: "Medium";
+  font-size: 1rem;
+  background-color: white;
+}
+
+.form-group select {
+  font-family: "Medium";
+  font-size: 1rem;
+  padding: 0.4rem 0.2rem;
+  width: 23rem;
+}
+
+.verification-section button {
+  padding: 0.5rem;
+  background: linear-gradient(to top right, #e3dfff, #ffffff);
+  color: black;
+  border: 2px solid black;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: "Medium";
+  font-size: 1rem;
+  margin-right: 0.4rem;
+}
+
+.verification-section button:hover {
+  background: #afa7f5;
+  color: white;
 }
 
 .submit-btn {

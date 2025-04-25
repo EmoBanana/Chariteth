@@ -10,5 +10,11 @@
     "tags": ["Youth Support"],
     "desc": "Donating essential items to an orphanage helps support the daily needs and development of children. Contributions like food, clothes, and supplies can make a meaningful difference in improving their quality of life and well-being.",
     "image": "orphanage.jpg"
+  },
+  {
+    "id": 7,
+    "tags": ["Environment"],
+    "desc": "Planting trees is vital for the environment. They absorb carbon dioxide, produce oxygen, and provide habitats for wildlife. Trees also help prevent soil erosion and improve air quality. By planting trees, we contribute to a healthier planet and combat climate change.",
+    "image": "tree.jpg"
   }
 ]

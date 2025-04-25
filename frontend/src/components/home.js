@@ -518,9 +518,7 @@ const OngoingProjects = () => {
           Set up recurring donations and get monthly CSR reports — effortless,
           impactful, and transparent.
         </p>
-        <a href="/corporate-donation" class="cta-button">
-          Start Now
-        </a>
+        <a class="cta-button">Start Now</a>
       </div>
 
       {isThankYouPopupVisible && (
